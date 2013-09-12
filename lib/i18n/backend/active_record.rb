@@ -16,11 +16,12 @@ module I18n
           []
         end
 
-        def store_translations(locale, data, options = {})
+        def store_translations(locale, data, assoc_id, options = {})
           escape = options.fetch(:escape, true)
           flatten_translations(locale, data, escape, false).each do |key, value|
             Translation.locale(locale).lookup(expand_keys(key)).delete_all
-            Translation.create(:locale => locale.to_s, :key => key.to_s, :value => value)
+            Translation.create(:locale => locale.to_s, :key => key.to_s, :value => value,
+                               ENV['translation_assoc_key'].to_sym => assoc_id )
           end
         end
 
