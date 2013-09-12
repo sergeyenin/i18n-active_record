@@ -5,7 +5,7 @@ Provides ability to store personal translations for each user/other_associated_m
 in database and use default translations from yml files if database doesn't contains it.
 
 This repository contains the I18n ActiveRecord backend and support code
-that has been extracted from the [I18n gem][].
+that has been extracted from the [I18n gem](https://github.com/svenfuchs/i18n).
 
 Installation
 ------------
@@ -114,5 +114,4 @@ Thats it! You are great! Now each user can set his own translations, and your ap
 will looking for it in database and take it from yaml file if user haven't translation
 for same key.
 
-P.S. Example app coming soon.
-
+Here you can browse [example app](https://github.com/Kamrad117/i18n-active_record-example) with implementation from readme.
