@@ -12,7 +12,7 @@ Installation
 
 For Bundler put the following in your Gemfile:
 ```ruby
-      gem 'i18n-db',
+      gem 'i18n-active_record',
           :git => 'git://github.com/sergeyenin/i18n-active_record.git',
           :branch => 'filters',
           :require => 'i18n/active_record'
