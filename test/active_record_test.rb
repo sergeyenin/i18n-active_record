@@ -3,7 +3,7 @@ require 'test_helper'
 class I18nBackendActiveRecordTest < Test::Unit::TestCase
   def setup
     I18n.backend = I18n::Backend::ActiveRecord.new
-    store_translations(:en, :foo => { :bar => 'bar', :baz => 'baz' })
+    I18n.backend.store_translations(:en, {:foo => { :bar => 'bar', :baz => 'baz' }}, 2)
   end
 
   def teardown
@@ -13,9 +13,9 @@ class I18nBackendActiveRecordTest < Test::Unit::TestCase
 
   test "store_translations does not allow ambiguous keys (1)" do
     I18n::Backend::ActiveRecord::Translation.delete_all
-    I18n.backend.store_translations(:en, :foo => 'foo')
-    I18n.backend.store_translations(:en, :foo => { :bar => 'bar' })
-    I18n.backend.store_translations(:en, :foo => { :baz => 'baz' })
+    I18n.backend.store_translations(:en, {:foo => 'foo'}, 2)
+    I18n.backend.store_translations(:en, {:foo => { :bar => 'bar' }}, 2)
+    I18n.backend.store_translations(:en, {:foo => { :baz => 'baz' }}, 2)
 
     translations = I18n::Backend::ActiveRecord::Translation.locale(:en).lookup('foo').all
     assert_equal %w(bar baz), translations.map(&:value)
@@ -25,9 +25,9 @@ class I18nBackendActiveRecordTest < Test::Unit::TestCase
 
   test "store_translations does not allow ambiguous keys (2)" do
     I18n::Backend::ActiveRecord::Translation.delete_all
-    I18n.backend.store_translations(:en, :foo => { :bar => 'bar' })
-    I18n.backend.store_translations(:en, :foo => { :baz => 'baz' })
-    I18n.backend.store_translations(:en, :foo => 'foo')
+    I18n.backend.store_translations(:en, {:foo => { :bar => 'bar' }}, 2)
+    I18n.backend.store_translations(:en, {:foo => { :baz => 'baz' }}, 2)
+    I18n.backend.store_translations(:en, {:foo => 'foo'}, 2)
 
     translations = I18n::Backend::ActiveRecord::Translation.locale(:en).lookup('foo').all
     assert_equal %w(foo), translations.map(&:value)
@@ -36,7 +36,7 @@ class I18nBackendActiveRecordTest < Test::Unit::TestCase
   end
 
   test "can store translations with keys that are translations containing special chars" do
-    I18n.backend.store_translations(:es, :"Pagina's" => "Pagina's" )
+    I18n.backend.store_translations(:es, {:"Pagina's" => "Pagina's"}, 2 )
     assert_equal "Pagina's", I18n.t(:"Pagina's", :locale => :es)
   end
 
