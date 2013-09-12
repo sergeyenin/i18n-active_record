@@ -1,7 +1,7 @@
 I18n::Backend::ActiveRecord
 ===========================
 
-Provides ability to store personal translations for each user/other_associated_model 
+Provides ability to store personal translations for each user/other_associated_model
 in database and use default translations from yml files if database doesn't contains it.
 
 This repository contains the I18n ActiveRecord backend and support code
@@ -53,19 +53,22 @@ end
 ```
 
 After that lets provide storing id of current user which will be used for selecting translations.
-Gem automatically includes it's controller helpers to ApplicationController.
-So you can just add this line to ApplicationController:
+You can do it yourself and place id of current user to ENV[ENV['translation_assoc_key']],
+(ENV['user_id'] in this example).
+Gem has a mixin I18n::Backend::ControllerHelpers, that already has following method.
+So you can just add this lines to ApplicationController:
 
 ```ruby
+ include I18n::Backend::ControllerHelpers
  before_filter { |c| c.set_translations_owner_id(current_user.id) }
 ```
 
 Finally lets provide ability to create translations to our users.
 In this example current_user is a devise method.
 
-#####Controller: 
+#####Controller:
 
-```ruby 
+```ruby
 class TranslationsController < ApplicationController
   def index
     @translations = I18n::Backend::ActiveRecord::Translation.locale(:en).where(user_id: current_user.id)
@@ -107,9 +110,9 @@ end
 <% end %>
 ```
 
-Thats it! You are great! Now each user can set his own translations, and your app 
+Thats it! You are great! Now each user can set his own translations, and your app
 will looking for it in database and take it from yaml file if user haven't translation
-for that key.
+for same key.
 
 P.S. Example app coming soon.
 
