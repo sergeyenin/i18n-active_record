@@ -17,6 +17,10 @@ For Bundler put the following in your Gemfile:
           :branch => 'filters',
           :require => 'i18n/active_record'
 ```
+
+Usage 
+-----
+
 To load `I18n::Backend::ActiveRecord` into your Rails application,
 create a new file in **config/initializers** named **locale.rb**.
 A configuration for your locale.rb should look like this:
