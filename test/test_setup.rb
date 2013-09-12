@@ -48,6 +48,7 @@ module I18n
             t.string :key
             t.text :value
             t.text :interpolations
+            t.integer :user_id, default: 2
             t.boolean :is_proc, :default => false
           end
           add_index :translations, [:locale, :key], :unique => true
