@@ -78,7 +78,7 @@ module I18n
             assoc_id = 0 if ENV[assoc_key].nil? || ENV[assoc_key].empty?
 
             if assoc_key && assoc_id
-              assoc_condition = "\"#{table_name}\".\"#{assoc_key}\" = #{assoc_id} AND "
+              assoc_condition = "\"#{table_name}\".\"#{assoc_key}\" = #{assoc_id} AND"
             else
               assoc_condition = ''
             end
