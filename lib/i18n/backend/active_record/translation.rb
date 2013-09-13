@@ -65,7 +65,7 @@ module I18n
 
           def lookup(keys, *separator)
             column_name = connection.quote_column_name('key')
-            keys = Array(keys).map! { |key| key.to_s }
+            keys = Array(keys).map { |key| key.to_s }
 
             unless separator.empty?
               warn "[DEPRECATION] Giving a separator to Translation.lookup is deprecated. " <<
@@ -79,10 +79,10 @@ module I18n
 
             if assoc_key && assoc_id
               assoc_condition = "\"#{table_name}\".\"#{assoc_key}\" = #{assoc_id} AND "
-              scoped(:conditions => ["#{assoc_condition} #{column_name} IN (?) OR #{column_name} LIKE ?", keys, namespace])
             else
-              self
+              assoc_condition = ''
             end
+            scoped(:conditions => ["#{assoc_condition} #{column_name} IN (?) OR #{column_name} LIKE ?", keys, namespace])
           end
 
           def available_locales
