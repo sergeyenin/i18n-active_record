@@ -18,8 +18,8 @@ module I18n
         end
 
         def store_translations(locale, data, options = {})
-          assoc_id = options[ENV['translation_assoc_key']]
-          options.delete(ENV['translation_assoc_key'])
+          assoc_id = options[ENV['translation_assoc_key'].to_sym]
+          options.delete(ENV['translation_assoc_key'].to_sym)
           escape = options.fetch(:escape, true)
           flatten_translations(locale, data, escape, false).each do |key, value|
             Translation.locale(locale).lookup(expand_keys(key)).delete_all
