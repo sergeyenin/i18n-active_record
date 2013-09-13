@@ -79,7 +79,7 @@ class TranslationsController < ApplicationController
   end
 
   def create
-    TRANSLATIONS_STORE.store_translations(params[:locale], {params[:key] => params[:value].strip}, current_user.id)
+    TRANSLATIONS_STORE.store_translations(params[:locale], {params[:key].strip => params[:value].strip}, {user_id: current_user.id})
     redirect_to translations_url, :notice => "Added translations"
   end
 end
