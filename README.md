@@ -117,5 +117,3 @@ end
 Thats it! You are great! Now each user can set his own translations, and your app
 will looking for it in database and take it from yaml file if user haven't translation
 for same key.
-
-Here you can browse [example app](https://github.com/Kamrad117/i18n-active_record-example) with implementation from readme.
