@@ -7,7 +7,7 @@ module I18n
     module ControllerHelpers
 
       def set_translations_owner_id(id)
-        assoc_foreign_key = ENV['translation_assoc_key']
+        assoc_foreign_key = ENV['owner_assoc_key']
         ENV[assoc_foreign_key] = id.to_s
         ENV['labels_assoc_id'] = Customer.find(id).labels.first.id
         ENV['labels_status'] = 'published'
