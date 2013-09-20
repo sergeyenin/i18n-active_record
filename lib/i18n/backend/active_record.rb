@@ -18,13 +18,18 @@ module I18n
         end
 
         def store_translations(locale, data, options = {})
-          assoc_id = options[ENV['translation_assoc_key'].to_sym]
-          options.delete(ENV['translation_assoc_key'].to_sym)
+          owner_id = options[ENV['owner_assoc_key'].to_sym]
+          labels_id = options[:labels_assoc_id]
+          draft_labels_id = options[:draft_labels_id]
+          options.delete(ENV['owner_assoc_key'].to_sym)
+          options.delete(:labels_assoc_id) if options[:labels_assoc_id]
+          options.delete(:draft_labels_id) if options[:draft_labels_id]
           escape = options.fetch(:escape, true)
           flatten_translations(locale, data, escape, false).each do |key, value|
             Translation.locale(locale).lookup(expand_keys(key)).delete_all
             attrs = {:locale => locale.to_s, :key => key.to_s, :value => value}
-            attrs.merge!(ENV['translation_assoc_key'].to_sym => assoc_id) if assoc_id
+            attrs.merge!(ENV['owner_assoc_key'].to_sym => owner_id) if owner_id
+            attrs.merge!(labels_id: labels_id, draft_labels_id: draft_labels_id)
             Translation.create(attrs)
           end
         end

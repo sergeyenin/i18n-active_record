@@ -48,6 +48,8 @@ module I18n
             t.string :key
             t.text :value
             t.text :interpolations
+            t.integer :labels_id, default: 0
+            t.integer :draft_labels_id, default: 0
             t.integer :user_id, default: 2
             t.boolean :is_proc, :default => false
           end

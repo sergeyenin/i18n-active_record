@@ -6,7 +6,7 @@ class I18nActiveRecordMissingTest < Test::Unit::TestCase
   end
 
   def setup
-    ENV['translation_assoc_key'] = 'user_id'
+    ENV['owner_assoc_key'] = 'user_id'
     ENV['user_id'] = 2.to_s
     I18n.backend.store_translations(:en, :bar => 'Bar', :i18n => { :plural => { :keys => [:zero, :one, :other] } })
     I18n.backend = I18n::Backend::Chain.new(Backend.new, I18n.backend)
@@ -86,7 +86,7 @@ class I18nActiveRecordMissingTest < Test::Unit::TestCase
   end
 
   test 'lookup found nothing if translation_assoc_key does not stored in ENV' do
-    ENV.delete('translation_assoc_key')
+    ENV.delete('owner_assoc_key')
     I18n::Backend::ActiveRecord::Translation.create!(locale: :en, key: 'kam', value: 'rad', user_id: 2)
     assert_raises(TypeError) { I18n::Backend::ActiveRecord::Translation.locale(:en).lookup('kam') }
   end

@@ -53,7 +53,7 @@ module I18n
         FALSY_CHAR = "\002"
 
         self.table_name = 'translations'
-        attr_accessible :locale, :key, :value, ENV['translation_assoc_key'].to_sym
+        attr_accessible :locale, :key, :value, ENV['owner_assoc_key'].to_sym
 
         serialize :value
         serialize :interpolations, Array
@@ -73,12 +73,16 @@ module I18n
             end
 
             namespace = "#{keys.last}#{I18n::Backend::Flatten::FLATTEN_SEPARATOR}%"
-            assoc_key = ENV['translation_assoc_key']
-            assoc_id = ENV[assoc_key]
-            assoc_id = 0 if ENV[assoc_key].nil? || ENV[assoc_key].empty?
+            owner_key = ENV['owner_assoc_key']
+            owner_id = ENV[owner_key]
+            owner_id = 0 if ENV[owner_key].nil? || ENV[owner_key].empty?
 
-            if assoc_key && assoc_id
-              assoc_condition = "`#{table_name}`.`#{assoc_key}` = #{assoc_id} AND"
+            labels_id = ENV['labels_assoc_id'] || 0
+            # draft_id = ENV['draft_assoc_id'] || 0
+            # status = ENV['labels_status']
+
+            if owner_key && owner_id && labels_id
+              assoc_condition = "`#{table_name}`.`#{owner_key}` = #{owner_id} AND `#{table_name}`.`labels_id` = #{labels_id} AND"
             else
               assoc_condition = ''
             end

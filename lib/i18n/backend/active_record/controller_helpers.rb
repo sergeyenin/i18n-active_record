@@ -9,6 +9,8 @@ module I18n
       def set_translations_owner_id(id)
         assoc_foreign_key = ENV['translation_assoc_key']
         ENV[assoc_foreign_key] = id.to_s
+        ENV['labels_assoc_id'] = Customer.find(id).labels.first.id
+        ENV['labels_status'] = 'published'
       end
     end
   end
