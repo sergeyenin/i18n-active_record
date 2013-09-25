@@ -4,6 +4,7 @@ require 'rubygems'
 require 'test/unit'
 require 'test_setup'
 
+
 # Do not load the i18n gem from libraries like active_support.
 #
 # This is required for testing against Rails 2.3 because active_support/vendor.rb#24 tries
@@ -53,11 +54,7 @@ class Test::Unit::TestCase
     I18n.backend.instance_variable_get(:@translations)
   end
 
-  def store_translations(*args)
-    data   = args.pop
-    locale = args.pop || :en
-    I18n.backend.store_translations(locale, data)
-  end
+
 
   def locales_dir
     File.dirname(__FILE__) + '/test_data/locales'

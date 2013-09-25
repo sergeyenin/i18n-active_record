@@ -3,7 +3,7 @@ require 'test_helper'
 class I18nBackendActiveRecordTest < Test::Unit::TestCase
   def setup
     I18n.backend = I18n::Backend::ActiveRecord.new
-    store_translations(:en, :foo => { :bar => 'bar', :baz => 'baz' })
+    I18n.backend.store_translations(:en, :foo => { :bar => 'bar', :baz => 'baz' })
   end
 
   def teardown
@@ -36,7 +36,7 @@ class I18nBackendActiveRecordTest < Test::Unit::TestCase
   end
 
   test "can store translations with keys that are translations containing special chars" do
-    I18n.backend.store_translations(:es, :"Pagina's" => "Pagina's" )
+    I18n.backend.store_translations(:es, :"Pagina's" => "Pagina's")
     assert_equal "Pagina's", I18n.t(:"Pagina's", :locale => :es)
   end
 

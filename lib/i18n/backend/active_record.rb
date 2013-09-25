@@ -1,4 +1,5 @@
 require 'i18n/backend/base'
+require 'i18n/backend/active_record/controller_helpers'
 
 module I18n
   module Backend
@@ -17,10 +18,14 @@ module I18n
         end
 
         def store_translations(locale, data, options = {})
+          assoc_id = options[ENV['translation_assoc_key'].to_sym]
+          options.delete(ENV['translation_assoc_key'].to_sym)
           escape = options.fetch(:escape, true)
           flatten_translations(locale, data, escape, false).each do |key, value|
             Translation.locale(locale).lookup(expand_keys(key)).delete_all
-            Translation.create(:locale => locale.to_s, :key => key.to_s, :value => value)
+            attrs = {:locale => locale.to_s, :key => key.to_s, :value => value}
+            attrs.merge!(ENV['translation_assoc_key'].to_sym => assoc_id) if assoc_id
+            Translation.create(attrs)
           end
         end
 
