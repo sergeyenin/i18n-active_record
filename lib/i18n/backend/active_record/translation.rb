@@ -8,10 +8,12 @@ module I18n
     # your the database:
     #
     #   create_table :translations do |t|
-    #     t.string :locale
-    #     t.string :key
-    #     t.text   :value
-    #     t.text   :interpolations
+    #     t.string  :locale
+    #     t.string  :key
+    #     t.text    :value
+    #     t.text    :interpolations
+    #     t.integer ENV['translation_assoc_key'].to_sym
+    #
     #     t.boolean :is_proc, :default => false
     #   end
     #
@@ -23,7 +25,8 @@ module I18n
     #
     # The :lookup scope adds a condition for looking up all translations
     # that either start with the given keys (joined by an optionally given
-    # separator or I18n.default_separator) or that exactly have this key.
+    # separator or I18n.default_separator) or that exactly have this key,
+    # and has ENV['translation_assoc_key'] equal to ENV[ENV['translation_assoc_key']].
     #
     #   # with translations present for :"foo.bar" and :"foo.baz"
     #   I18n::Backend::ActiveRecord::Translation.lookup(:foo)
@@ -62,15 +65,24 @@ module I18n
 
           def lookup(keys, *separator)
             column_name = connection.quote_column_name('key')
-            keys = Array(keys).map { |key| key.to_s }
+            keys = Array(keys).map! { |key| key.to_s }
 
             unless separator.empty?
               warn "[DEPRECATION] Giving a separator to Translation.lookup is deprecated. " <<
-                "You can change the internal separator by overwriting FLATTEN_SEPARATOR."
+                   "You can change the internal separator by overwriting FLATTEN_SEPARATOR."
             end
 
             namespace = "#{keys.last}#{I18n::Backend::Flatten::FLATTEN_SEPARATOR}%"
-            scoped(:conditions => ["#{column_name} IN (?) OR #{column_name} LIKE ?", keys, namespace])
+            assoc_key = ENV['translation_assoc_key']
+            assoc_id = ENV[assoc_key]
+            assoc_id = 0 if ENV[assoc_key].nil? || ENV[assoc_key].empty?
+
+            if assoc_key && assoc_id
+              assoc_condition = "`#{table_name}`.`#{assoc_key}` = #{assoc_id} AND"
+            else
+              assoc_condition = ''
+            end
+            scoped(:conditions => ["#{assoc_condition} #{column_name} IN (?) OR #{column_name} LIKE ?", keys, namespace])
           end
 
           def available_locales
